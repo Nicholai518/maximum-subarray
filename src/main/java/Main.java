@@ -21,6 +21,16 @@ public class Main {
 		int[] highestNumberOnRightArray = new int[]{-1, 1, 10};
 		System.out.println("highest number on right. array contains positive and negative. Should return 11: " + maxSubArray(highestNumberOnRightArray));
 
+		// logic for movement left FIRST, when highest number index is in the middle
+		// EX:
+		// Input: nums = [-2,1,10,-1,-2]
+		// Output: 11
+		int[] middleMoveLeftFirst = new int[]{-2, 1, 10, -1, -2};
+		System.out.println("highest number in middle, moving left first. should return 11: " + maxSubArray(middleMoveLeftFirst));
+
+		int[] middleMoveRightFirst = new int[]{-2, -1, 10, 1, -2};
+		System.out.println("highest number in middle, moving right first. should return 11: " + maxSubArray(middleMoveRightFirst));
+
 	}
 	public static int maxSubArray(int[] nums) {
 
@@ -76,82 +86,13 @@ public class Main {
 			 return highestNumberOnRight(nums);
 		 }
 		// else the highestNumberIsSomewhereInTheMiddle - call
+		else if(highestNumberIndex != 0 && highestNumberIndex != nums.length -1){
+			 return highestNumberInMiddle (nums, highestNumberIndex);
+		 }
 
 
 
-
-
-		// --- Anything below this point are arrays that include a mixture of negative and positive numbers ---
-
-		// we will need an int variable to keep track of the highestSum
-		// int highestSum
-
-		// We will need an int variable to keep track of the result (highest sum + element and index), to be compared to highestSum
-		// int result
-
-		// we need to find the index of the largest number in num
-		// int largestNumberIndex
-		// set the largest number to "highestSum" variable
-
-
-
-
-
-
-
-
-
-		// scenario 3
-		// The largest number is NOT farthest left or Farthest right. Somewhere in the middle
-		// EX:
-		// Input: nums = [-2,1,10,1,-2]
-		// Output: 12
-		// create public static int highestNumberInMiddle(int[] nums, index){}
-
-		// There are two scenarios,
-		// you move the index to the left FIRST and the right SECOND and work your way outwards
-		// you move the index to the right FIRST and the left SECOND and work your way outwards
-
-
-		// variables
-		// highestSum = nums[index];
-		// int result = nums[index];
-
-
-		// public static int moveLeftFirst(){}
-		// logic for movement left FIRST
-		// we know what index has the highest number
-		// int availableMovesLEFTWARD = index - 1
-		// availableMovesRIGHTWARD = (nums.length -1) - index
-
-		// if availableMovesLEFTWARD >= zero
-		// result = nums[availableMovesLEFTWARD] + result;
-		// if result > highestSum,  update. highestSum = result;
-		// decrement availableMovesLEFTWARD--
-
-		// if availableMovesRIGHTWARD < nums.length
-		// result = nums[availableMovesRightward] + result;
-		// if result > highestSum,  update. highestSum = result;
-		// increment availableMovesRightWARD++
-
-
-		// public static int moveRightFirst(){}
-		// logic for movement right FIRST
-		// variables
-		// highestSum = nums[index];
-		// int result = nums[index];
-
-		// if availableMovesRIGHTWARD < nums.length
-		// result = nums[availableMovesRightward] + result;
-		// if result > highestSum,  update. highestSum = result;
-		// increment availableMovesRightWARD++
-
-		// if availableMovesLEFTWARD >= zero
-		// result = nums[availableMovesLEFTWARD] + result;
-		// if result > highestSum,  update. highestSum = result;
-		// decrement availableMovesLEFTWARD--
-
-
+		// code should never make it this far, but if it does return 0
 		return 0;
 	}
 
@@ -223,9 +164,138 @@ public class Main {
 		return highestSum;
 	}
 
-	// create public static int highestNumberInMiddle(int[] nums, index){}
+	// scenario 3
+	// The largest number is NOT farthest left or Farthest right. Somewhere in the middle
+	// EX:
+	// Input: nums = [-2,1,10,1,-2]
+	// Output: 12
+	 public static int highestNumberInMiddle(int[] nums, int index){
+		 // variables
+		 int highestSum = nums[index];
+		 int finalResult = 0;
+		 int moveLeftFirstResult = 0;
+		 int moveRightFirstResult = 0;
 
-	// public static int moveLeftFirst(){}
+		 // There are two scenarios,
+		 // you move the index to the left FIRST and the right SECOND and work your way outwards
+		 moveLeftFirstResult = moveLeftFirst(nums, index);
 
-	// public static int moveRightFirst(){}
+		 // you move the index to the right FIRST and the left SECOND and work your way outwards
+		 moveRightFirstResult = moveRightFirst(nums, index);
+
+		 // whichever result is greater, assign to final result
+		 if(moveLeftFirstResult > moveRightFirstResult){
+			 return moveLeftFirstResult;
+		 }
+		 else if (moveRightFirstResult > moveLeftFirstResult ){
+			 return moveRightFirstResult;
+		 }
+		 // if equal, just return left
+		 else{
+			 return moveLeftFirstResult;
+		 }
+
+	 }
+
+
+	// logic for movement left FIRST, when highest number index is in the middle
+	// EX:
+	// Input: nums = [-2,1,10,-1,-2]
+	// Output: 11
+	public static int moveLeftFirst(int[] nums, int index){
+		int availableMovesLeftward = index - 1;
+		//                                 4           - 2
+		int availableMovesRightward = (nums.length -1) - index;
+		int result = 0;
+		int highestSum = nums[index];
+		boolean flag = true;
+		while(flag) {
+			// left movement first
+			// you still need the if statement because its possible to run out of left movement
+			// but still have right movement available
+			if (availableMovesLeftward >= 0) {
+				result = nums[availableMovesLeftward] + result;
+
+				// if result is greater than highestSum, update highestSum
+				if (result > highestSum) {
+					highestSum = result;
+				}
+				// decrement availableMovesLEFTWARD--
+				availableMovesLeftward--;
+			}
+
+			// right movement second
+			// you still need the if statement because its possible to run out of right movement
+			// but still have left movement available
+			if (availableMovesRightward < nums.length) {
+				result = nums[availableMovesRightward] + result;
+
+				// if result is greater than highestSum, update highestSum
+				if (result > highestSum) {
+					highestSum = result;
+				}
+				// increment availableMovesRightward++
+				availableMovesRightward++;
+			}
+
+			// update flag for next run of while loop
+			// use OR because its possible the highest index is not exactly in middle
+			// we may have more left or more right movements
+			flag = (availableMovesLeftward >= 0) || (availableMovesRightward < nums.length);
+		}
+
+			// return the highest sum for left movement first
+			return highestSum;
+	}
+
+	// logic for movement right FIRST, when highest number index is in the middle
+	// EX:
+	// Input: nums = [-2,-1,10,1,-2]
+	// Output: 11
+	public static int moveRightFirst(int[] nums, int index){
+		int availableMovesLeftward = index - 1;
+		//                                 4           - 2
+		int availableMovesRightward = (nums.length -1) - index;
+		int result = 0;
+		int highestSum = nums[index];
+		boolean flag = true;
+		while(flag) {
+
+			// right movement first
+			// you still need the if statement because its possible to run out of right movement
+			// but still have left movement available
+			if (availableMovesRightward < nums.length) {
+				result = nums[availableMovesRightward] + result;
+
+				// if result is greater than highestSum, update highestSum
+				if (result > highestSum) {
+					highestSum = result;
+				}
+				// increment availableMovesRightward++
+				availableMovesRightward++;
+			}
+			// left movement second
+			// you still need the if statement because its possible to run out of left movement
+			// but still have right movement available
+			if (availableMovesLeftward >= 0) {
+				result = nums[availableMovesLeftward] + result;
+
+				// if result is greater than highestSum, update highestSum
+				if (result > highestSum) {
+					highestSum = result;
+				}
+				// decrement availableMovesLEFTWARD--
+				availableMovesLeftward--;
+			}
+
+			// update flag for next run of while loop
+			// use OR because its possible the highest index is not exactly in middle
+			// we may have more left or more right movements
+			flag = (availableMovesLeftward >= 0) || (availableMovesRightward < nums.length);
+		}
+
+		// return the highest sum for left movement first
+		return highestSum;
+
+	}
 }
