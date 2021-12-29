@@ -13,6 +13,10 @@ public class Main {
 		int[] allNegativeNumbers = new int[]{-1, -2, -3};
 		System.out.println("all negative numbers. Should return -1 : " + maxSubArray(allNegativeNumbers));
 
+		// test highest number on left. array includes positive and negative numbers
+		int[] highestNumberOnLeftarray = new int[]{10, 1, -1};
+		System.out.println("highest number on left. array contains positive and negative. Should return 11: " + maxSubArray(highestNumberOnLeftarray));
+
 	}
 	public static int maxSubArray(int[] nums) {
 
@@ -35,6 +39,7 @@ public class Main {
 			if(nums[i] < 0){
 				allNumbersPositive = false;
 			}
+			// if there is a positive number, set allNumbersNegative to false
 			else if(nums[i] >= 0){
 				allNumbersNegative = false;
 			}
@@ -47,33 +52,26 @@ public class Main {
 		}
 
 		// now that we have iterated through nums, check the flags
+		// There are NO negative numbers, add them up and return the sum
 		 if (allNumbersPositive){
 			 return allNumbersPositive(nums);
 		 }
+		 // ALL numbers are negative, find the least negative number and return it
 		 else if  (allNumbersNegative){
 			 return allNumbersNegative(nums);
-
 		 }
-		// else if highestNumberIndex = 0  - call highestNumberOnLeft(int[] nums){}
+
+		 // if both flags are false, we have a mixture of numbers
+		 // lets check if the highest index is 0, nums.length-1, or in the middle
+		// index = 0, the highest number is all the way t
+		 if (highestNumberIndex == 0){
+			 return highestNumberOnLeft(nums);
+		 }
+
 		// else if highestNumberIndex = nums.length -1  - call highestNumberOnright(int[] nums){}
 		// else the highestNumberIsSomewhereInTheMiddle - call
 
-		// edge case 2
-		// There are no negative numbers - return the sum of all numbers
-		// EX:
-		// Input: nums = [1, 2, 3]
-		// Output: 6
-		// create public static int allNumbersPositive(int[] nums){}
-		// return result
 
-
-		//edge case 3
-		// All the numbers are negative - return the smallest number negative number
-		// EX:
-		// Input: nums = [-1, -2, -3, -4, -5]
-		// Output: -1
-		// create public static int allNumbersNegative(int[] nums){}
-		// return result
 
 
 
@@ -91,19 +89,7 @@ public class Main {
 
 
 
-		// scenario 1
-		// The largest number is the farthest left number of the contiguous array
-		// EX:
-		//Input: nums = [9, 1, 2, -3 ]
-		//Output: 12
-		// create public static int highestNumberOnLeft(int[] nums){}
-		// int highestSum = 0;
-		// int result = 0;
-		// iterate through array, starting at index 0
-		// result = highestsum + element
-		// then compare result to highestSum
-		// if result is greater than highestSum, update. highestSum = result
-		// lastly return highestSum
+
 
 
 		// scenario 2
@@ -194,7 +180,35 @@ public class Main {
 		return leastNegativeNumber;
 	}
 
-	// create public static int highestNumberOnLeft(int[] nums){}
+
+	// scenario 1
+	// The largest number is the farthest left number of the contiguous array
+	// EX:
+	//Input: nums = [9, 1, 2, -3 ]
+	//Output: 12
+
+
+
+
+
+
+	// lastly return highestSum
+
+	public static int highestNumberOnLeft(int[] nums){
+		int highestSum = nums[0];
+		int result = 0;
+
+		// iterate through array, starting at index 0
+		for(int i=0; i<nums.length; i++){
+			result = result + nums[i];
+
+			// then compare result to highestSum
+			if (result > highestSum){
+				highestSum = result;
+			}
+		}
+		return highestSum;
+	}
 
 	// create public static int highestNumberOnRight(int[] nums){}
 
