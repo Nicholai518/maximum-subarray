@@ -14,8 +14,12 @@ public class Main {
 		System.out.println("all negative numbers. Should return -1 : " + maxSubArray(allNegativeNumbers));
 
 		// test highest number on left. array includes positive and negative numbers
-		int[] highestNumberOnLeftarray = new int[]{10, 1, -1};
-		System.out.println("highest number on left. array contains positive and negative. Should return 11: " + maxSubArray(highestNumberOnLeftarray));
+		int[] highestNumberOnLeftArray = new int[]{10, 1, -1};
+		System.out.println("highest number on left. array contains positive and negative. Should return 11: " + maxSubArray(highestNumberOnLeftArray));
+
+		// test highest number on left. array includes positive and negative numbers
+		int[] highestNumberOnRightArray = new int[]{-1, 1, 10};
+		System.out.println("highest number on right. array contains positive and negative. Should return 11: " + maxSubArray(highestNumberOnRightArray));
 
 	}
 	public static int maxSubArray(int[] nums) {
@@ -63,12 +67,14 @@ public class Main {
 
 		 // if both flags are false, we have a mixture of numbers
 		 // lets check if the highest index is 0, nums.length-1, or in the middle
-		// index = 0, the highest number is all the way t
+		// index = 0, the highest number is all the way on the left
 		 if (highestNumberIndex == 0){
 			 return highestNumberOnLeft(nums);
 		 }
-
-		// else if highestNumberIndex = nums.length -1  - call highestNumberOnright(int[] nums){}
+		// index = nums.length -1 , the highest number is all the way on the right
+		 else if (highestNumberIndex == nums.length -1){
+			 return highestNumberOnRight(nums);
+		 }
 		// else the highestNumberIsSomewhereInTheMiddle - call
 
 
@@ -92,19 +98,7 @@ public class Main {
 
 
 
-		// scenario 2
-		// The largest number is the farthest right number of the contiguous array
-		// EX:
-		// Input: nums = [-1,-2,-3,4,5]
-		// Output: 9
-		// create public static int highestNumberOnRight(int[] nums){}
-		// int highestSum = 0;
-		// int result = 0;
-		// iterate through array, starting at index nums.length -1
-		// result = highestsum + element
-		// then compare result to highestSum
-		// if result is greater than highestSum, update. highestSum = result
-		// lastly return highestSum
+
 
 
 		// scenario 3
@@ -187,13 +181,6 @@ public class Main {
 	//Input: nums = [9, 1, 2, -3 ]
 	//Output: 12
 
-
-
-
-
-
-	// lastly return highestSum
-
 	public static int highestNumberOnLeft(int[] nums){
 		int highestSum = nums[0];
 		int result = 0;
@@ -207,10 +194,34 @@ public class Main {
 				highestSum = result;
 			}
 		}
+		// lastly return highestSum
 		return highestSum;
 	}
 
-	// create public static int highestNumberOnRight(int[] nums){}
+
+	// scenario 2
+	// The largest number is the farthest right number of the contiguous array
+	// EX:
+	// Input: nums = [-1,-2,-3,4,5]
+	// Output: 9
+
+	public static int highestNumberOnRight(int[] nums){
+		int highestSum = nums[nums.length - 1];
+		int result = 0;
+
+		// iterate through array, starting at index nums.length -1
+		for(int i = nums.length -1; i >= 0; i--){
+			result = result + nums[i];
+
+			// then compare result to highestSum
+			if (result > highestSum){
+				highestSum = result;
+			}
+		}
+
+		// lastly return highestSum
+		return highestSum;
+	}
 
 	// create public static int highestNumberInMiddle(int[] nums, index){}
 
