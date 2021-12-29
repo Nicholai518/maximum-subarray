@@ -1,23 +1,59 @@
 public class Main {
 	public static void main(String[] args){
 
+		// test only one number
+		int[] onlyOneNumber = new int[]{1};
+		System.out.println("Only one number. Should return 1 : " + maxSubArray(onlyOneNumber));
+
+		// test all positive numbers
+		int[] allPositiveNumbers = new int[]{1, 2, 3};
+		System.out.println("all positive numbers. Should return 6 : " + maxSubArray(allPositiveNumbers));
+
+		// test all positive numbers
+		int[] allNegativeNumbers = new int[]{-1, -2, -3};
+		System.out.println("all negative numbers. Should return -1 : " + maxSubArray(allNegativeNumbers));
+
 	}
 	public static int maxSubArray(int[] nums) {
-
 
 		// edge case 1
 		// if there is only 1 number in nums
 		// return nums[0]
+		if(nums.length == 1){
+			return nums[0];
+		}
 
 
-		// boolean allNumbersPositive = true;
-		// boolean allNumbersNegative = true;
-		// int highestNumberIndex = 0;
+		 boolean allNumbersPositive = true;
+		 boolean allNumbersNegative = true;
+		 int highestNumberIndex = 0;
 
 
 		// for loop to iterate through all the numbers
-		// if  allNumbersPositive is true  - call allNumbersPositive(int[] nums){}
-		// else if  allNumbersNegative is true  - call allNumbersNegative(int[] nums){}
+		for(int i = 0; i<nums.length; i++){
+			// there is a negative number, set allNumbersPositive to false
+			if(nums[i] < 0){
+				allNumbersPositive = false;
+			}
+			else if(nums[i] >= 0){
+				allNumbersNegative = false;
+			}
+
+			// update the highestNumberIndex if necessary
+			// if they are the same number, do not update
+			if(nums[i] > nums[highestNumberIndex]){
+				highestNumberIndex = i;
+			}
+		}
+
+		// now that we have iterated through nums, check the flags
+		 if (allNumbersPositive){
+			 return allNumbersPositive(nums);
+		 }
+		 else if  (allNumbersNegative){
+			 return allNumbersNegative(nums);
+
+		 }
 		// else if highestNumberIndex = 0  - call highestNumberOnLeft(int[] nums){}
 		// else if highestNumberIndex = nums.length -1  - call highestNumberOnright(int[] nums){}
 		// else the highestNumberIsSomewhereInTheMiddle - call
@@ -138,4 +174,33 @@ public class Main {
 
 		return 0;
 	}
+
+	 public static int allNumbersPositive(int[] nums){
+		int sum = 0;
+		for(int i = 0; i<nums.length; i++){
+			sum += nums[i];
+		}
+		return sum;
+	 }
+
+	public static int allNumbersNegative(int[] nums){
+		int leastNegativeNumber = nums[0];
+
+		for(int i = 0; i<nums.length; i++){
+			if(nums[i] > leastNegativeNumber){
+				leastNegativeNumber = nums[i];
+			}
+		}
+		return leastNegativeNumber;
+	}
+
+	// create public static int highestNumberOnLeft(int[] nums){}
+
+	// create public static int highestNumberOnRight(int[] nums){}
+
+	// create public static int highestNumberInMiddle(int[] nums, index){}
+
+	// public static int moveLeftFirst(){}
+
+	// public static int moveRightFirst(){}
 }
