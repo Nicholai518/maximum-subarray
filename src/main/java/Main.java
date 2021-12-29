@@ -33,8 +33,8 @@ public class Main {
 
 
 		// failed example on leet code
-		int[] twoOrMoreOfTheSameHighestNumber = new int[]{-2, 1,-3,4,-1,2,1,-5,4};
-		System.out.println("Two or More of same highest number. should return 6: " + maxSubArray(middleMoveRightFirst));
+		int[] failedExample = new int[]{-2, 1,-3,4,-1,2,1,-5,4};
+		System.out.println("Two or More of same highest number. should return 6: " + maxSubArray(failedExample));
 	}
 	public static int maxSubArray(int[] nums) {
 
@@ -179,6 +179,8 @@ public class Main {
 		 int finalResult = 0;
 		 int moveLeftFirstResult = 0;
 		 int moveRightFirstResult = 0;
+		 int moveOnlyLeftwardResult = 0;
+		 int moveOnlyRightwardResult = 0;
 
 		 // There are two scenarios,
 		 // you move the index to the left FIRST and the right SECOND and work your way outwards
@@ -187,17 +189,24 @@ public class Main {
 		 // you move the index to the right FIRST and the left SECOND and work your way outwards
 		 moveRightFirstResult = moveRightFirst(nums, index);
 
-		 // whichever result is greater, assign to final result
-		 if(moveLeftFirstResult > moveRightFirstResult){
-			 return moveLeftFirstResult;
-		 }
-		 else if (moveRightFirstResult > moveLeftFirstResult ){
-			 return moveRightFirstResult;
-		 }
-		 // if equal, just return left
-		 else{
-			 return moveLeftFirstResult;
-		 }
+		 // from the index, just move left until the beginning
+		 moveOnlyLeftwardResult = fromMiddleMoveAllTheWayleft(nums, index);
+
+		 // from the index, just move right until the end
+		 moveOnlyRightwardResult = fromMiddleMoveAllTheWayRight(nums, index);
+
+		 // add all result to array
+		 int[] allResults = new int[]{moveLeftFirstResult, moveRightFirstResult, moveOnlyLeftwardResult, moveOnlyRightwardResult};
+
+		 // iterate through all results, find the highest
+		finalResult = moveLeftFirstResult;
+		for(int i = 0; i<allResults.length; i++){
+			// if current index is higher then "final result" , update
+			if(allResults[i] > finalResult){
+				finalResult = allResults[i];
+			}
+		}
+		return finalResult;
 
 	 }
 
@@ -335,5 +344,60 @@ public class Main {
 		// return the highest sum for left movement first
 		return highestSum;
 
+	}
+
+	// {-2, 1,-3,4,-1,2,1,-5,4}
+	public static int fromMiddleMoveAllTheWayleft(int[] nums, int index){
+		// result should nums[index]
+		int result = nums[index];
+		// set the highest sum to the highest number found in the array at the parameter index
+		int highestSum = nums[index];
+
+		int leftMoveCounter = 1;
+
+		while((index - leftMoveCounter) >=0 ){
+			// the nums index should be index - movecounter
+			result = nums[index - leftMoveCounter] + result;
+
+			// if result is greater than highestSum, update highestSum
+			if (result > highestSum) {
+				highestSum = result;
+			}
+
+			// increment leftMoveCounter
+			leftMoveCounter++;
+		}
+
+		// after the while loop completes
+		// return the highest sum for left movement first
+		return highestSum;
+	}
+
+	// {-2, 1,-3,4,-1,2,1,-5,4}
+	public static int fromMiddleMoveAllTheWayRight(int[] nums, int index){
+
+		// result should nums[index]
+		int result = nums[index];
+		// set the highest sum to the highest number found in the array at the parameter index
+		int highestSum = nums[index];
+
+		int rightMoveCounter = 1;
+
+		while((index + rightMoveCounter) < nums.length ){
+			// the nums index should be index - movecounter
+			result = nums[index + rightMoveCounter] + result;
+
+			// if result is greater than highestSum, update highestSum
+			if (result > highestSum) {
+				highestSum = result;
+			}
+
+			// increment rightMoveCounter
+			rightMoveCounter++;
+		}
+
+		// after the while loop completes
+		// return the highest sum for left movement first
+		return highestSum;
 	}
 }
