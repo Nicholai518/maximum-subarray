@@ -31,6 +31,10 @@ public class Main {
 		int[] middleMoveRightFirst = new int[]{-2, -1, 10, 1, -2};
 		System.out.println("highest number in middle, moving right first. should return 11: " + maxSubArray(middleMoveRightFirst));
 
+
+		// failed example on leet code
+		int[] twoOrMoreOfTheSameHighestNumber = new int[]{-2, 1,-3,4,-1,2,1,-5,4};
+		System.out.println("Two or More of same highest number. should return 6: " + maxSubArray(middleMoveRightFirst));
 	}
 	public static int maxSubArray(int[] nums) {
 
@@ -203,47 +207,63 @@ public class Main {
 	// Input: nums = [-2,1,10,-1,-2]
 	// Output: 11
 	public static int moveLeftFirst(int[] nums, int index){
+		//                            2     -1
 		int availableMovesLeftward = index - 1;
 		//                                 4           - 2
 		int availableMovesRightward = (nums.length -1) - index;
-		int result = 0;
+
+		// result should nums[index]
+		int result = nums[index];
+		// set the highest sum to the highest number found in the array at the parameter index
 		int highestSum = nums[index];
+		// set flag to true to begin the while loop
 		boolean flag = true;
+
+		int leftMoveCounter = 1;
+		int rightMoveCounter =1;
+
 		while(flag) {
 			// left movement first
 			// you still need the if statement because its possible to run out of left movement
 			// but still have right movement available
-			if (availableMovesLeftward >= 0) {
-				result = nums[availableMovesLeftward] + result;
+
+			if ( (index - leftMoveCounter) >= 0){
+				// the nums index should be index - movecounter
+				result = nums[index - leftMoveCounter] + result;
 
 				// if result is greater than highestSum, update highestSum
 				if (result > highestSum) {
 					highestSum = result;
 				}
-				// decrement availableMovesLEFTWARD--
-				availableMovesLeftward--;
+
+				// increment leftMoveCounter
+				leftMoveCounter++;
 			}
 
 			// right movement second
 			// you still need the if statement because its possible to run out of right movement
 			// but still have left movement available
-			if (availableMovesRightward < nums.length) {
-				result = nums[availableMovesRightward] + result;
+			if ( (index + rightMoveCounter) < nums.length){
+
+				// the nums index should be index - movecounter
+				result = nums[index + rightMoveCounter] + result;
 
 				// if result is greater than highestSum, update highestSum
 				if (result > highestSum) {
 					highestSum = result;
 				}
-				// increment availableMovesRightward++
-				availableMovesRightward++;
+
+				// increment rightMoveCounter
+				rightMoveCounter++;
 			}
 
 			// update flag for next run of while loop
 			// use OR because its possible the highest index is not exactly in middle
 			// we may have more left or more right movements
-			flag = (availableMovesLeftward >= 0) || (availableMovesRightward < nums.length);
+			flag = ( (index - leftMoveCounter) >= 0) || ( (index + rightMoveCounter) < nums.length);
 		}
 
+			// after the while loop completes
 			// return the highest sum for left movement first
 			return highestSum;
 	}
@@ -253,47 +273,65 @@ public class Main {
 	// Input: nums = [-2,-1,10,1,-2]
 	// Output: 11
 	public static int moveRightFirst(int[] nums, int index){
+		//                            2     -1
 		int availableMovesLeftward = index - 1;
 		//                                 4           - 2
 		int availableMovesRightward = (nums.length -1) - index;
-		int result = 0;
+
+		// result should nums[index]
+		int result = nums[index];
+		// set the highest sum to the highest number found in the array at the parameter index
 		int highestSum = nums[index];
+		// set flag to true to begin the while loop
 		boolean flag = true;
+
+		int leftMoveCounter = 1;
+		int rightMoveCounter =1;
+
 		while(flag) {
+
 
 			// right movement first
 			// you still need the if statement because its possible to run out of right movement
 			// but still have left movement available
-			if (availableMovesRightward < nums.length) {
-				result = nums[availableMovesRightward] + result;
+			if ( (index + rightMoveCounter) < nums.length){
+
+				// the nums index should be index - movecounter
+				result = nums[index + rightMoveCounter] + result;
 
 				// if result is greater than highestSum, update highestSum
 				if (result > highestSum) {
 					highestSum = result;
 				}
-				// increment availableMovesRightward++
-				availableMovesRightward++;
+
+				// increment rightMoveCounter
+				rightMoveCounter++;
 			}
+
 			// left movement second
 			// you still need the if statement because its possible to run out of left movement
 			// but still have right movement available
-			if (availableMovesLeftward >= 0) {
-				result = nums[availableMovesLeftward] + result;
+
+			if ( (index - leftMoveCounter) >= 0){
+				// the nums index should be index - movecounter
+				result = nums[index - leftMoveCounter] + result;
 
 				// if result is greater than highestSum, update highestSum
 				if (result > highestSum) {
 					highestSum = result;
 				}
-				// decrement availableMovesLEFTWARD--
-				availableMovesLeftward--;
+
+				// increment leftMoveCounter
+				leftMoveCounter++;
 			}
 
 			// update flag for next run of while loop
 			// use OR because its possible the highest index is not exactly in middle
 			// we may have more left or more right movements
-			flag = (availableMovesLeftward >= 0) || (availableMovesRightward < nums.length);
+			flag = ( (index - leftMoveCounter) >= 0) || ( (index + rightMoveCounter) < nums.length);
 		}
 
+		// after the while loop completes
 		// return the highest sum for left movement first
 		return highestSum;
 
